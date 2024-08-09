@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { Label } from "@/components/ui/label"
 import {
@@ -23,6 +23,26 @@ export default function Component() {
     const [name, setName] = useState("")
     const [otp, setOtp] = useState("")
     const [verify, setVerify] = useState(false)
+    
+
+
+
+    const handleSubmit = async () => {
+        
+        try {
+            const res = await fetch("http://localhost:3000/api/register", {
+                method: "POST",
+                body: JSON.stringify({ name, email, password, confirmPassword, phoneNumber, userName })
+            })
+            if(res.status === 200){
+                console.log("User created successfully");
+            }
+            
+        } catch (error) {
+            console.error("Fetch error:", error);
+            
+        }
+        }
 
 
 
@@ -35,6 +55,7 @@ export default function Component() {
                 })
                 if(res.status === 200){
                     setVerify(true)
+                    
                 }
                 else{
                     throw new Error("Please fill the details");
@@ -82,7 +103,7 @@ export default function Component() {
                         </Link>
                     </p>
                 </div>
-                <form className="space-y-6" action="#" method="POST">
+
                     <div>
                         <Label htmlFor="name" className="block text-sm font-medium text-muted-foreground">
                             Name
@@ -201,17 +222,16 @@ export default function Component() {
                             </div>
                         </div>
                     )}
-                    <Button type="button" onClick={handleOTP}>{showOTP ? "Submit" : "Send OTP"}</Button>
+                    <Button type="button" className={`${verify?"hidden":"block"}`} onClick={handleOTP}>{showOTP ? "Submit" : "Send OTP"}</Button>
 
                     <div>
                         <Button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-zinc-600 px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-zinc-600/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                            onClick={handleSubmit}
+                            className={`flex w-full ${verify?"pointer-events-auto":"pointer-events-none"} justify-center rounded-md bg-zinc-600 px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-zinc-600/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
                         >
                             Register
                         </Button>
                     </div>
-                </form>
             </div>
         </div>
     )

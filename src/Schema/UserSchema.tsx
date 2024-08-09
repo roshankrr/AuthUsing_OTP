@@ -20,19 +20,8 @@ const UserSchema=new mongoose.Schema({
         required:true,
         unique:true
     },
-    Otp:{
-        type:Number,
-        required:true
-    },
-    OtpExpire:{
-        type:Date,
-        default:Date.now()+300000
-    },
+
     Password:{
-        type:String,
-        required:true
-    },
-    CPassword:{
         type:String,
         required:true
     },

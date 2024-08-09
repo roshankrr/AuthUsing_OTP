@@ -9,9 +9,11 @@ export async function POST(req:NextRequest,res:NextResponse){
         const otpData=await Otp.findOne({Phone:phNo})
         if(otpData){
             if(otp===otpData.Otp){
+                await Otp.findOneAndDelete({Phone:phNo})
                 return NextResponse.json({name:name,status:200,message:"OTP verified successfully"})
             }
             else{
+
                 return NextResponse.json({status:500,message:"OTP verification failed"})
             }
         }
